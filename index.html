@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Inicio</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+</head>
+<body>
+  <!-- Carrusel de imágenes -->
+  <div class="carousel-container">
+    <div class="carousel">
+      <img src="img/1.jpg" alt="Imagen 1">
+      <img src="img/2.jpg" alt="Imagen 2">
+      <img src="img/3.jpg" alt="Imagen 3">
+    </div>
+  </div>
+
+  <!-- Menú de navegación -->
+  <header>
+    <nav class="navbar">
+      <div class="logo">Desarrollo de aplicaciones web</div>
+      <ul class="nav-links">
+        <li><a href="index.html">Inicio</a></li>
+        <li><a href="galeria.php">Galería</a></li>
+        <li><a href="login.php">Login</a></li>
+        <li><a href="registro.php">Registro</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- Cuerpo de la página -->
+  <main class="content-container">
+    <h1>Explora nuestros cursos</h1>
+    <div class="courses">
+      <div class="course-card">
+        <h2>Introducción a la Computación</h2>
+        <p>Aprende los conceptos básicos de la informática, incluyendo sistemas operativos, redes y más.</p>
+        <button>Más información</button>
+      </div>
+      <div class="course-card">
+        <h2>Inteligencia Artificial</h2>
+        <p>Descubre cómo funcionan los algoritmos de IA, desde machine learning hasta redes neuronales.</p>
+        <button>Más información</button>
+      </div>
+      <div class="course-card">
+        <h2>Desarrollo Web</h2>
+        <p>Domina HTML, CSS, JavaScript y frameworks modernos para crear aplicaciones web profesionales.</p>
+        <button>Más información</button>
+      </div>
+    </div>
+  </main>
+
+  <!-- Pie de página -->
+  <footer id="contact">
+    <div class="footer-container">
+      <p>Dirección: Calle Principal #123, Ciudad, País</p>
+      <p>Email: contacto@ejemplo.com | Teléfono: +123 456 7890</p>
+      <p>&copy; 2024 Mi Aplicación. Todos los derechos reservados.</p>
+    </div>
+  </footer>
+
+  <script>
+    // Carrusel automático con transiciones fluidas
+    $(document).ready(function () {
+      let currentIndex = 0;
+      const images = $('.carousel img');
+      const imageCount = images.length;
+
+      images.hide();
+      images.eq(currentIndex).show();
+
+      function showNextImage() {
+        images.eq(currentIndex).fadeOut(500, function () {
+          currentIndex = (currentIndex + 1) % imageCount;
+          images.eq(currentIndex).fadeIn(500);
+        });
+      }
+
+      setInterval(showNextImage, 3000);
+    });
+  </script>
+</body>
+</html>

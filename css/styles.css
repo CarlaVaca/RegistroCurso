@@ -1,0 +1,288 @@
+/* Estilos generales */
+body {
+  margin: 0;
+  font-family: 'Arial', sans-serif;
+  color: #333;
+  background-color: #f8f9fa;
+  line-height: 1.6;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+/* Menú de navegación */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+  background-color: #007BFF;
+  color: #fff;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.navbar .logo {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.navbar .nav-links {
+  display: flex;
+  gap: 1.5rem;
+}
+
+.navbar .nav-links a {
+  color: #fff;
+  font-size: 1rem;
+  transition: color 0.3s;
+}
+
+.navbar .nav-links a:hover {
+  color: #d4e0f5;
+}
+
+/* Carrusel */
+.carousel-container {
+  position: relative;
+  max-width: 100%;
+  height: 60vh;
+  overflow: hidden;
+  margin: 1.5rem 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #000;
+}
+
+.carousel {
+  display: flex;
+  width: 100%;
+  height: 100%;
+}
+
+.carousel img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: opacity 0.5s;
+  display: block;
+}
+
+/* Contenedor de contenido */
+.content-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.content-container h1 {
+  text-align: center;
+  margin-bottom: 2rem;
+  color: #007BFF;
+}
+
+/* Tarjetas de cursos */
+.courses {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+}
+
+.course-card {
+  padding: 1.5rem;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  background-color: #fff;
+  text-align: center;
+}
+
+.course-card h2 {
+  color: #007BFF;
+  margin-bottom: 1rem;
+}
+
+.course-card p {
+  margin-bottom: 1.5rem;
+}
+
+.course-card button {
+  padding: 0.5rem 1rem;
+  background-color: #007BFF;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.course-card button:hover {
+  background-color: #0056b3;
+}
+
+/* Pie de página */
+footer {
+  background-color: #333;
+  color: #fff;
+  text-align: center;
+  padding: 1.5rem 0;
+}
+
+footer p {
+  margin: 0.5rem 0;
+}
+
+footer a {
+  color: #007BFF;
+}
+
+footer a:hover {
+  text-decoration: underline;
+
+}
+/* Contenedor del formulario de inicio de sesión */
+.login-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 80vh; /* Asegura que ocupe la mayor parte de la pantalla */
+  padding: 2rem;
+  background-color: #f8f9fa; /* Fondo claro para resaltar */
+}
+
+.login-container h1 {
+  margin-bottom: 1.5rem;
+  color: #007BFF;
+}
+
+.form-group {
+  width: 100%;
+  max-width: 400px; /* Ancho máximo del formulario */
+  margin-bottom: 1rem;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: bold;
+  color: #333;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 0.75rem;
+  font-size: 1rem;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.btn {
+  width: 100%;
+  max-width: 400px;
+  padding: 0.75rem;
+  font-size: 1rem;
+  background-color: #007BFF;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.btn:hover {
+  background-color: #0056b3;
+}
+
+.register-link {
+  margin-top: 1rem;
+  text-align: center;
+}
+
+.register-link a {
+  color: #007BFF;
+  font-weight: bold;
+  text-decoration: none;
+}
+
+.register-link a:hover {
+  text-decoration: underline;
+}
+
+/* Centrar el formulario */
+.form-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto;
+    min-height: calc(100vh - 70px); /* Resta el espacio del header */
+    padding: 2rem;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    max-width: 400px; /* Ancho máximo del formulario */
+}
+
+.form-container h1 {
+    margin-bottom: 2rem;
+    color: #007BFF;
+    text-align: center;
+}
+
+.form-group {
+    width: 100%;
+    margin-bottom: 1rem;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: bold;
+    color: #333;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 0.5rem;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-sizing: border-box;
+    font-size: 1rem;
+}
+
+.btn {
+    width: 100%;
+    padding: 0.75rem;
+    background-color: #007BFF;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background-color 0.3s;
+}
+
+.btn:hover {
+    background-color: #0056b3;
+}
+
+.error-message,
+.success-message {
+    font-size: 1rem;
+    margin-bottom: 1rem;
+    text-align: center;
+}
+
