@@ -17,7 +17,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['create_tutor'])) {
     $nombre = $_POST['nombre'];
     $email = $_POST['email'];
     $password = $_POST['password'];
-    $role_id = $_POST['role_id'];
+    $role_id = 2; // El rol de tutor será siempre 2
 
     // Verificar si se sube una nueva imagen
     if (isset($_FILES['img']) && $_FILES['img']['error'] == 0) {
@@ -31,7 +31,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['create_tutor'])) {
     }
 
     // Inserción en la base de datos
-    if (!empty($nombre) && !empty($email) && !empty($password) && !empty($role_id)) {
+    if (!empty($nombre) && !empty($email) && !empty($password)) {
         $query = "INSERT INTO empleados (nombre, email, contrasena, roles_id_Rol, img) VALUES (?, ?, ?, ?, ?)";
         $stmt = $mysqli->prepare($query);
         $stmt->bind_param("sssis", $nombre, $email, $password, $role_id, $img_path);
@@ -64,7 +64,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['update_tutor'])) {
     $nombre = $_POST['nombre'];
     $email = $_POST['email'];
     $password = $_POST['password'];
-    $role_id = $_POST['role_id'];
+    $role_id = 2; // El rol de tutor será siempre 2
 
     // Verificar si se sube una nueva imagen
     if (isset($_FILES['img']) && $_FILES['img']['error'] == 0) {
@@ -79,7 +79,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['update_tutor'])) {
     }
 
     // Actualización de los datos del tutor
-    if (!empty($nombre) && !empty($email) && !empty($password) && !empty($role_id)) {
+    if (!empty($nombre) && !empty($email) && !empty($password)) {
         $query = "UPDATE empleados SET nombre = ?, email = ?, contrasena = ?, roles_id_Rol = ?, img = ? WHERE id_Empleado = ?";
         $stmt = $mysqli->prepare($query);
         $stmt->bind_param("sssisi", $nombre, $email, $password, $role_id, $img_path, $empleado_id);
@@ -94,10 +94,24 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['update_tutor'])) {
     }
 }
 
-// Consultar todos los tutores y roles
-$tutores_result = $mysqli->query("SELECT * FROM empleados WHERE roles_id_Rol = 2");
-$roles_result = $mysqli->query("SELECT * FROM roles");
+// Eliminar tutor
+if (isset($_GET['delete_tutor'])) {
+    $empleado_id = $_GET['delete_tutor'];
 
+    // Eliminar tutor de la base de datos
+    $query = "DELETE FROM empleados WHERE id_Empleado = ?";
+    $stmt = $mysqli->prepare($query);
+    $stmt->bind_param("i", $empleado_id);
+    if ($stmt->execute()) {
+        $success_message = "Tutor eliminado exitosamente.";
+    } else {
+        $error_message = "Error al eliminar el tutor: " . $mysqli->error;
+    }
+    $stmt->close();
+}
+
+// Consultar todos los tutores
+$tutores_result = $mysqli->query("SELECT * FROM empleados WHERE roles_id_Rol = 2");
 ?>
 
 <!DOCTYPE html>
@@ -138,12 +152,6 @@ $roles_result = $mysqli->query("SELECT * FROM roles");
             <input type="text" name="nombre" placeholder="Nombre del tutor" required>
             <input type="email" name="email" placeholder="Correo electrónico" required>
             <input type="password" name="password" placeholder="Contraseña" required>
-            <select name="role_id" required>
-                <option value="">Seleccione Rol</option>
-                <?php while ($role = $roles_result->fetch_assoc()): ?>
-                    <option value="<?php echo $role['id_Rol']; ?>"><?php echo htmlspecialchars($role['nombre']); ?></option>
-                <?php endwhile; ?>
-            </select>
             <input type="file" name="img">
             <button type="submit" name="create_tutor">Crear Tutor</button>
         </form>
@@ -154,22 +162,15 @@ $roles_result = $mysqli->query("SELECT * FROM roles");
             <tr>
                 <th>Nombre</th>
                 <th>Email</th>
-                <th>Rol</th>
                 <th>Acciones</th>
             </tr>
             <?php while ($tutor = $tutores_result->fetch_assoc()): ?>
                 <tr>
                     <td><?php echo htmlspecialchars($tutor['nombre']); ?></td>
                     <td><?php echo htmlspecialchars($tutor['email']); ?></td>
-                    <td><?php
-                        // Obtener nombre del rol
-                        $role_id = $tutor['roles_id_Rol'];
-                        $role_query = $mysqli->query("SELECT nombre FROM roles WHERE id_Rol = $role_id");
-                        $role = $role_query->fetch_assoc();
-                        echo $role['nombre'];
-                    ?></td>
                     <td>
-                        <a href="?edit_tutor=<?php echo $tutor['id_Empleado']; ?>">Editar</a>
+                        <a href="?edit_tutor=<?php echo $tutor['id_Empleado']; ?>">Editar</a> |
+                        <a href="?delete_tutor=<?php echo $tutor['id_Empleado']; ?>" onclick="return confirm('¿Está seguro de que desea eliminar este tutor?')">Eliminar</a>
                     </td>
                 </tr>
             <?php endwhile; ?>
@@ -184,17 +185,6 @@ $roles_result = $mysqli->query("SELECT * FROM roles");
                 <input type="text" name="nombre" value="<?php echo htmlspecialchars($empleado['nombre']); ?>" required>
                 <input type="email" name="email" value="<?php echo htmlspecialchars($empleado['email']); ?>" required>
                 <input type="password" name="password" value="<?php echo htmlspecialchars($empleado['contrasena']); ?>" required>
-                <select name="role_id" required>
-                    <?php
-                    // Consultar roles
-                    $roles_result_edit = $mysqli->query("SELECT * FROM roles");
-                    while ($role = $roles_result_edit->fetch_assoc()):
-                    ?>
-                        <option value="<?php echo $role['id_Rol']; ?>" <?php echo ($role['id_Rol'] == $empleado['roles_id_Rol']) ? 'selected' : ''; ?>>
-                            <?php echo htmlspecialchars($role['nombre']); ?>
-                        </option>
-                    <?php endwhile; ?>
-                </select>
                 <input type="file" name="img">
                 <button type="submit" name="update_tutor">Actualizar Tutor</button>
             </form>
@@ -203,5 +193,4 @@ $roles_result = $mysqli->query("SELECT * FROM roles");
 </main>
 </body>
 </html>
-
 

@@ -18,7 +18,7 @@ if (!isset($_SESSION['user_id'])) {
 }
 
 // Obtener el id_Persona desde la sesión
-$id_Persona = $_SESSION['user_id'];  // Usamos 'user_id' en lugar de 'id_persona'
+$id_Persona = $_SESSION['user_id'];
 
 // Verificar si se ha recibido el parámetro id_Curso
 if (isset($_GET['id_Curso'])) {
@@ -31,7 +31,6 @@ if (isset($_GET['id_Curso'])) {
     $curso_stmt->execute();
     $curso_result = $curso_stmt->get_result();
 
-    // Si el curso existe, continuar con la consulta de instructores
     if ($curso_result->num_rows > 0) {
         $curso_row = $curso_result->fetch_assoc();
         $curso_nombre = $curso_row['nombre'];
@@ -46,12 +45,10 @@ if (isset($_GET['id_Curso'])) {
         $instructor_stmt->execute();
         $instructor_result = $instructor_stmt->get_result();
     } else {
-        // Si no se encontró el curso, redirigir al listado de cursos
         header("Location: galeria.php");
         exit;
     }
 } else {
-    // Si no se recibió el id_Curso, redirigir al listado de cursos
     header("Location: galeria.php");
     exit;
 }
@@ -59,22 +56,40 @@ if (isset($_GET['id_Curso'])) {
 // Verificar si se ha enviado el formulario de inscripción
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['inscribir'])) {
     $id_CursoInstructor = $_POST['id_CursoInstructor'];
-    $fecha_inscripcion = date('Y-m-d H:i:s'); // Fecha y hora actual
 
-    // Insertar inscripción en la tabla inscripciones_tiene_persona
-    $inscripcion_query = "INSERT INTO inscripciones_tiene_persona (fecha_inscripcion, id_CursoInstructor, id_Persona)
-                          VALUES (?, ?, ?)";
-    $inscripcion_stmt = $mysqli->prepare($inscripcion_query);
-    $inscripcion_stmt->bind_param("sii", $fecha_inscripcion, $id_CursoInstructor, $id_Persona);
-    $inscripcion_stmt->execute();
+    // Verificar si el usuario ya está inscrito en este curso
+    $verificar_query = "SELECT COUNT(*) AS count
+                        FROM inscripciones_tiene_persona
+                        WHERE id_CursoInstructor = ? AND id_Persona = ?";
+    $verificar_stmt = $mysqli->prepare($verificar_query);
+    $verificar_stmt->bind_param("ii", $id_CursoInstructor, $id_Persona);
+    $verificar_stmt->execute();
+    $verificar_result = $verificar_stmt->get_result();
+    $verificar_row = $verificar_result->fetch_assoc();
 
-    if ($inscripcion_stmt->affected_rows > 0) {
-        echo "<p>Inscripción realizada con éxito.</p>";
+    if ($verificar_row['count'] > 0) {
+        $_SESSION['message'] = "Ya estás inscrito en este curso.";
     } else {
-        echo "<p>Error en la inscripción. Por favor, inténtelo de nuevo.</p>";
-    }
-}
+        $fecha_inscripcion = date('Y-m-d H:i:s');
 
+        // Insertar inscripción en la tabla inscripciones_tiene_persona
+        $inscripcion_query = "INSERT INTO inscripciones_tiene_persona (fecha_inscripcion, id_CursoInstructor, id_Persona)
+                              VALUES (?, ?, ?)";
+        $inscripcion_stmt = $mysqli->prepare($inscripcion_query);
+        $inscripcion_stmt->bind_param("sii", $fecha_inscripcion, $id_CursoInstructor, $id_Persona);
+        $inscripcion_stmt->execute();
+
+        if ($inscripcion_stmt->affected_rows > 0) {
+            $_SESSION['message'] = "Inscripción realizada con éxito.";
+        } else {
+            $_SESSION['message'] = "Error en la inscripción. Por favor, inténtelo de nuevo.";
+        }
+    }
+
+    // Redirigir para evitar reenvío del formulario
+    header("Location: inscripcion.php?id_Curso=$id_Curso");
+    exit;
+}
 ?>
 
 <!DOCTYPE html>
@@ -84,15 +99,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['inscribir'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Instructores del Curso</title>
     <link rel="stylesheet" href="css/styles.css">
+    <script>
+        // Mostrar un mensaje emergente y redirigir al aceptar
+        window.onload = function() {
+            const message = "<?php echo isset($_SESSION['message']) ? $_SESSION['message'] : ''; ?>";
+            if (message) {
+                alert(message);
+                <?php unset($_SESSION['message']); ?> // Limpiar el mensaje después de mostrarlo
+                if (message === "Inscripción realizada con éxito.") {
+                    window.location.href = "galeria.php"; // Redirigir a la galería solo en caso de éxito
+                }
+            }
+        };
+    </script>
 </head>
 <body>
-
 <header>
     <h1>Instructores del Curso</h1>
     <nav class="navbar">
         <div class="logo">Desarrollo de aplicaciones web</div>
         <ul class="nav-links">
-            <li><a href="logout.php">Inicio</a></li>
+            <li><a href="galeria.php">Inicio</a></li>
             <li><a href="miscursos.php">Mis Cursos</a></li>
             <li><a href="logout.php">Cerrar sesión</a></li>
             <li><a href="nosotros.php">Tutores</a></li>
@@ -128,9 +155,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['inscribir'])) {
         <?php else: ?>
             <p>No hay instructores asignados a este curso.</p>
         <?php endif; ?>
-
     </div>
 </main>
-
 </body>
 </html>

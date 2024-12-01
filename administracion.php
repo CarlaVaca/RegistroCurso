@@ -23,40 +23,43 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['role'] != 1) { // El rol de admi
 </head>
 <body>
     <!-- Menú de navegación -->
-  <header>
-    <nav class="navbar">
-      <div class="logo">Desarrollo de aplicaciones web</div>
-      <ul class="nav-links">
-        <li><a href="index.html">Inicio</a></li>
-        <li><a href="cursos.php">Cursos</a></li>
-        <li><a href="tutores.php">Tutores</a></li>
-        <li><a href="estudiantes.php">Estudiantes</a></li>
-          <li><a href="cursoTutor.php">Cursos y tutores</a></li>
-        <li><a href="logout.php">Cerrar sesión</a></li>
-      </ul>
-    </nav>
-  </header>
+    <header>
+        <nav class="navbar">
+            <div class="logo">Desarrollo de aplicaciones web</div>
+            <ul class="nav-links">
+                <li><a href="index.html">Inicio</a></li>
+                <li><a href="cursos.php">Cursos</a></li>
+                <li><a href="tutores.php">Tutores</a></li>
+                <li><a href="estudiantes.php">Estudiantes</a></li>
+                <li><a href="cursoTutor.php">Cursos y tutores</a></li>
+                <li><a href="logout.php">Cerrar sesión</a></li>
+            </ul>
+        </nav>
+    </header>
 
-  <!-- Cuerpo de la página -->
-  <main class="content-container">
-    <h1>Panel de Administración</h1>
-    <p>Bienvenido, <?php echo htmlspecialchars($_SESSION['user_name']); ?></p>
-    <p>Aquí podrás gestionar usuarios, contenido y más.</p>
+    <!-- Cuerpo de la página -->
+    <main class="content-container">
+        <h1>Panel de Administración</h1>
+        <p>Bienvenido, <?php echo htmlspecialchars($_SESSION['user_name']); ?></p>
+        <p>Aquí podrás gestionar usuarios, contenido y más.</p>
+    </main>
 
-  </main>
+    <!-- Pie de página -->
+    <footer id="contact">
+        <div class="footer-container">
+            <p>Dirección: AV. Universitaria #123, Loja, Ecuador</p>
+            <p>Email: contacto@utpl.edu.ec | Teléfono: +123 456 7890</p>
+            <p>&copy; 2024 CarlyCursos. Todos los derechos reservados.</p>
+        </div>
+    </footer>
 
-  <!-- Pie de página -->
-  <footer id="contact">
-    <div class="footer-container">
-      <p>Dirección: Calle Principal #123, Ciudad, País</p>
-      <p>Email: contacto@ejemplo.com | Teléfono: +123 456 7890</p>
-      <p>&copy; 2024 Mi Aplicación. Todos los derechos reservados.</p>
-    </div>
-  </footer>
-
-  <script>
-
+    <!-- Scripts adicionales -->
+    <script>
+        // Aquí puedes agregar scripts adicionales si es necesario
+        console.log("Panel de administración cargado correctamente.");
+    </script>
 </body>
 </html>
+
 
 

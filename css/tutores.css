@@ -8,8 +8,8 @@
 /* Estilos para el cuerpo */
 body {
     font-family: Arial, sans-serif;
-    background-color: #f4f4f4;
-    color: #333;
+    background-color: #fff; /* Fondo oscuro */
+    color: #ccc; /* Texto claro */
     line-height: 1.6;
 }
 
@@ -19,7 +19,7 @@ body {
     max-width: 800px;
     margin: 20px auto;
     padding: 20px;
-    background: #fff;
+    background: #fff; /* Fondo oscuro para el contenedor */
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
@@ -28,25 +28,25 @@ body {
 h1, h2 {
     text-align: center;
     margin-bottom: 20px;
-    color: #333;
+    color: #fff; /* Color de texto blanco para títulos */
 }
 
 /* Mensajes */
 .success-message {
-    background: #d4edda;
-    color: #155724;
+    background: #2d6a4f; /* Verde oscuro para el éxito */
+    color: #fff;
     padding: 10px;
     margin-bottom: 20px;
-    border: 1px solid #c3e6cb;
+    border: 1px solid #2b5238;
     border-radius: 4px;
 }
 
 .error-message {
-    background: #f8d7da;
-    color: #721c24;
+    background: #9d0208; /* Rojo oscuro para los errores */
+    color: #fff;
     padding: 10px;
     margin-bottom: 20px;
-    border: 1px solid #f5c6cb;
+    border: 1px solid #8c0201;
     border-radius: 4px;
 }
 
@@ -61,12 +61,14 @@ form input,
 form button {
     padding: 10px;
     font-size: 16px;
-    border: 1px solid #ddd;
+    border: 1px solid #555; /* Bordes oscuros */
     border-radius: 4px;
+    background: #444; /* Fondo oscuro para campos de entrada */
+    color: #ddd; /* Texto claro en campos */
 }
 
 form button {
-    background: #007bff;
+    background: #4CAF50; /* Verde para el botón */
     color: #fff;
     border: none;
     cursor: pointer;
@@ -74,7 +76,7 @@ form button {
 }
 
 form button:hover {
-    background: #0056b3;
+    background: #45a049; /* Efecto al pasar el ratón */
 }
 
 /* Tabla */
@@ -88,36 +90,36 @@ table th,
 table td {
     padding: 10px;
     text-align: left;
-    border: 1px solid #ddd;
+    border: 1px solid #555; /* Bordes oscuros */
 }
 
 table th {
-    background: #007bff;
+    background: #444; /* Fondo oscuro para las cabeceras */
     color: #fff;
 }
 
 table tr:nth-child(even) {
-    background: #f9f9f9;
+    background: #2b2b2b; /* Fondo más oscuro para las filas pares */
 }
 
 table tr:hover {
-    background: #f1f1f1;
+    background: #444; /* Fondo al pasar el ratón por las filas */
 }
 
 /* Enlaces */
 a {
-    color: #007bff;
+    color: #4CAF50; /* Verde claro para los enlaces */
     text-decoration: none;
     transition: color 0.3s ease;
 }
 
 a:hover {
-    color: #0056b3;
+    color: #45a049; /* Efecto al pasar el ratón sobre el enlace */
 }
 
 /* Navbar */
 .navbar {
-    background: #007bff;
+    background: #333; /* Fondo oscuro para la barra de navegación */
     color: #fff;
     padding: 10px 20px;
     display: flex;

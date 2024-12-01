@@ -182,6 +182,7 @@ $categorias_result = $mysqli->query("SELECT * FROM categoria");
         </table>
     </div>
 </main>
+
 </body>
 </html>
 <?php $mysqli->close(); ?>

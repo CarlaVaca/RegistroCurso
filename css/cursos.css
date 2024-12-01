@@ -2,6 +2,7 @@
 .container {
     width: 70%;
     margin: 30px auto;
+    flex: 1; /* Asegura que el contenido ocupe espacio y el pie quede al final */
 }
 
 form {
@@ -87,6 +88,7 @@ textarea {
     border-radius: 4px;
     margin-bottom: 20px;
 }
+
 /* Estilos del menú de navegación */
 header {
   background-color: #333;
@@ -127,3 +129,39 @@ header {
 .nav-links a:hover {
   color: #ff9800;
 }
+
+/* Pie de página mejorado */
+footer {
+  background-color: #333;
+  color: white;
+  padding: 20px 0;
+  text-align: center;
+  position: relative; /* Evita solaparse */
+  bottom: 0;
+  width: 100%;
+  margin-top: 20px; /* Añade espacio entre el contenido y el pie */
+  font-size: 0.9em;
+}
+
+footer p {
+  margin: 5px 0;
+  line-height: 1.6;
+}
+
+footer a {
+  color: #ff9800;
+  text-decoration: none;
+}
+
+footer a:hover {
+  text-decoration: underline;
+}
+
+/* Asegura que el contenido principal se ajuste correctamente */
+html, body {
+  height: 100%;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+}
+

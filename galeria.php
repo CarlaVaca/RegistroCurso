@@ -21,7 +21,6 @@ include('db_connection.php');
     <title>Galería de Cursos</title>
     <link rel="stylesheet" href="css/styles.css">
     <style>
-        /* Estilo para centrar la tabla */
         .container {
             text-align: center;
             margin-top: 20px;
@@ -41,12 +40,6 @@ include('db_connection.php');
 
         .gallery-table th {
             background-color: #f2f2f2;
-        }
-
-        .gallery-image {
-            width: 100px;
-            height: 100px;
-            object-fit: cover;
         }
 
         h2 {
@@ -78,10 +71,24 @@ include('db_connection.php');
             padding: 10px;
             font-size: 16px;
         }
+
+        .image-container img {
+            max-width: 100%;
+            height: auto;
+        }
     </style>
+    <script>
+        // Función para desplazarse automáticamente a la sección de categorías
+        function scrollToCategory() {
+            const categorySection = document.getElementById("categorySection");
+            if (categorySection) {
+                categorySection.scrollIntoView({ behavior: "smooth" });
+            }
+        }
+    </script>
 </head>
 
-<body>
+<body onload="scrollToCategory()">
 
 <header>
     <nav class="navbar">
@@ -89,21 +96,18 @@ include('db_connection.php');
         <ul class="nav-links">
             <li><a href="logout.php">Inicio</a></li>
             <li><a href="miscursos.php">Mis Cursos</a></li>
-            <li><a href="logout.php">Cerrar sesión</a></li>
             <li><a href="nosotros.php">Tutores</a></li>
+            <li><a href="logout.php">Cerrar sesión</a></li>
         </ul>
     </nav>
 </header>
 
 <main>
-   <div class="container">
-       <!--Imagen de promoción-->
+    <div class="container">
         <div class="image-container">
             <img src="img/curso.png" alt="Curso 1" class="image">
         </div>
-    <div class="container">
         <h1>Galería de Cursos</h1>
-        <!-- Formulario para seleccionar categoría -->
         <form method="GET" action="galeria.php">
             <label for="categoria" class="form-label">Selecciona una categoría:</label>
             <select name="categoria_id" id="categoria" class="form-select" onchange="this.form.submit()">
@@ -113,7 +117,6 @@ include('db_connection.php');
                 $query = "SELECT id_categoria, nombre FROM categoria";
                 $result = $mysqli->query($query);
 
-                // Generar las opciones para el desplegable
                 while ($row = $result->fetch_assoc()) {
                     $selected = (isset($_GET['categoria_id']) && $_GET['categoria_id'] == $row['id_categoria']) ? 'selected' : '';
                     echo "<option value='" . $row['id_categoria'] . "' $selected>" . htmlspecialchars($row['nombre']) . "</option>";
@@ -122,54 +125,46 @@ include('db_connection.php');
             </select>
         </form>
 
-        <?php
-        // Filtrar los cursos por categoría seleccionada
-        if (isset($_GET['categoria_id']) && !empty($_GET['categoria_id'])) {
-            $categoria_id = $_GET['categoria_id'];
+        <div id="categorySection">
+            <?php
+            if (isset($_GET['categoria_id']) && !empty($_GET['categoria_id'])) {
+                $categoria_id = $_GET['categoria_id'];
+                $query = "SELECT c.id_Curso, c.nombre, c.descripcion, c.fecha_inicio, c.fecha_fin, c.numero_plazas, ca.nombre as categoria
+                          FROM cursos c
+                          JOIN categoria ca ON c.id_categoria = ca.id_categoria
+                          WHERE ca.id_categoria = ?";
+                if ($stmt = $mysqli->prepare($query)) {
+                    $stmt->bind_param("i", $categoria_id);
+                    $stmt->execute();
+                    $result = $stmt->get_result();
+                    if ($result->num_rows > 0) {
+                        echo "<table class='gallery-table'>";
+                        echo "<tr><th>ID</th><th>Nombre</th><th>Descripción</th><th>Fecha Inicio</th><th>Fecha Fin</th><th>Plazas</th><th>Acciones</th></tr>";
 
-            // Consulta para obtener los cursos filtrados por categoría
-            $query = "SELECT c.id_Curso, c.nombre, c.descripcion, c.fecha_inicio, c.fecha_fin, c.numero_plazas, ca.nombre as categoria
-                      FROM cursos c
-                      JOIN categoria ca ON c.id_categoria = ca.id_categoria
-                      WHERE ca.id_categoria = ?";
-
-            // Preparar y ejecutar la consulta
-            if ($stmt = $mysqli->prepare($query)) {
-                $stmt->bind_param("i", $categoria_id); // Vincular el parámetro
-                $stmt->execute();
-                $result = $stmt->get_result(); // Obtener el resultado de la consulta
-
-                // Mostrar los cursos en una tabla
-                if ($result->num_rows > 0) {
-                    echo "<table class='gallery-table'>";
-                    echo "<tr><th>ID</th><th>Nombre</th><th>Descripción</th><th>Fecha Inicio</th><th>Fecha Fin</th><th>Plazas</th><th>Acciones</th></tr>";
-
-                    while ($row = $result->fetch_assoc()) {
-                        echo "<tr>";
-                        echo "<td>" . htmlspecialchars($row['id_Curso']) . "</td>";
-                        echo "<td>" . htmlspecialchars($row['nombre']) . "</td>";
-                        echo "<td>" . htmlspecialchars($row['descripcion']) . "</td>";
-                        echo "<td>" . htmlspecialchars($row['fecha_inicio']) . "</td>";
-                        echo "<td>" . htmlspecialchars($row['fecha_fin']) . "</td>";
-                        echo "<td>" . htmlspecialchars($row['numero_plazas']) . "</td>";
-                        echo "<td><a href='inscripcion.php?id_Curso=" . $row['id_Curso'] . "'>Inscribirse</a></td>";
-                        echo "</tr>";
+                        while ($row = $result->fetch_assoc()) {
+                            echo "<tr>";
+                            echo "<td>" . htmlspecialchars($row['id_Curso']) . "</td>";
+                            echo "<td>" . htmlspecialchars($row['nombre']) . "</td>";
+                            echo "<td>" . htmlspecialchars($row['descripcion']) . "</td>";
+                            echo "<td>" . htmlspecialchars($row['fecha_inicio']) . "</td>";
+                            echo "<td>" . htmlspecialchars($row['fecha_fin']) . "</td>";
+                            echo "<td>" . htmlspecialchars($row['numero_plazas']) . "</td>";
+                            echo "<td><a href='inscripcion.php?id_Curso=" . $row['id_Curso'] . "'>Inscribirse</a></td>";
+                            echo "</tr>";
+                        }
+                        echo "</table>";
+                    } else {
+                        echo "<p>No hay cursos disponibles para esta categoría.</p>";
                     }
-                    echo "</table>";
-                } else {
-                    echo "<p>No hay cursos disponibles para esta categoría.</p>";
+                    $stmt->close();
                 }
-
-                // Cerrar la declaración
-                $stmt->close();
+            } else {
+                echo "<p>No se ha seleccionado ninguna categoría.</p>";
             }
-        } else {
-            echo "<p>No se ha seleccionado ninguna categoría.</p>";
-        }
-        ?>
+            ?>
+        </div>
     </div>
 </main>
 
 </body>
 </html>
-
