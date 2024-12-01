@@ -2,8 +2,9 @@
 // Incluir el archivo de conexión
 include('db_connection.php');
 
-// Inicializar una variable para los mensajes de error
+// Inicializar una variable para los mensajes de error y éxito
 $error_message = "";
+$success_message = "";
 
 // Comprobar si el formulario ha sido enviado
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -12,6 +13,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $email = mysqli_real_escape_string($mysqli, trim($_POST['email']));
     $contrasena = trim($_POST['contrasena']);
     $confirm_contrasena = trim($_POST['confirm_contrasena']);
+    $roles_id_Rol = 4; // Valor fijo para el campo roles_id_Rol
 
     // Verificar que los campos no estén vacíos
     if (empty($nombre) || empty($email) || empty($contrasena) || empty($confirm_contrasena)) {
@@ -31,15 +33,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         if ($result->num_rows > 0) {
             $error_message = "El correo electrónico ya está registrado.";
         } else {
-            // Guardar la contraseña tal como está sin encriptarla
-            // Insertar el nuevo usuario en la base de datos
+            // Insertar el nuevo usuario en la base de datos sin encriptar la contraseña
             $insert_query = "INSERT INTO registro_personas (nombre, email, roles_id_Rol, contrasena) VALUES (?, ?, ?, ?)";
             $stmt = $mysqli->prepare($insert_query);
-            $stmt->bind_param("sss", $nombre, $email, $roles_id_Rol, $contrasena);
+            $stmt->bind_param("ssis", $nombre, $email, $roles_id_Rol, $contrasena); // Aquí se guarda la contraseña sin encriptar
 
             if ($stmt->execute()) {
-                // Redirigir a la página de login si el registro es exitoso
-                header("Location: login.php");
+                $success_message = "Registro exitoso. Redirigiendo al inicio de sesión...";
+                // Redirigir a la página de login después de 3 segundos
+                header("refresh:3;url=login.php");
                 exit;
             } else {
                 $error_message = "Error al registrar el usuario: " . $mysqli->error;
@@ -55,7 +57,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Registro de Usuario</title>
-    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/registro.css">
 </head>
 <header>
     <nav class="navbar">
@@ -100,6 +102,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     </div>
 </body>
 </html>
+
+
 
 
 

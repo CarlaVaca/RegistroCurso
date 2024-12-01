@@ -1,52 +1,70 @@
 <?php
 session_start();
+require 'db_connection.php'; // Incluir el archivo de conexión a la base de datos
 
-// Verificar si el usuario está autenticado
-if (!isset($_SESSION['user_id'])) {
-    header("Location: login.html");
-    exit;
+$error = ""; // Variable para almacenar errores
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $email = $_POST['email'];
+    $password = $_POST['password'];
+
+    // Consulta en la tabla registro_personas
+    $stmt = $mysqli->prepare("SELECT id_Persona, contrasena, roles_id_Rol, nombre FROM registro_personas WHERE email = ?");
+    $stmt->bind_param("s", $email);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    if ($result->num_rows == 1) {
+        $row = $result->fetch_assoc();
+        // Comparar contraseñas en texto plano (sin hash)
+        if ($password == $row['contrasena']) {
+            // Credenciales válidas
+            $_SESSION['loggedin'] = true;
+            $_SESSION['user_id'] = $row['id_Persona'];
+            $_SESSION['role'] = $row['roles_id_Rol'];
+            $_SESSION['user_name'] = $row['nombre']; // Guardamos el nombre de usuario
+
+            if ($row['roles_id_Rol'] == 4) {
+                header("Location: galeria.php");
+                exit; // Detener ejecución tras redirigir
+            } else {
+                $error = "Rol no válido en registro_personas.";
+            }
+        } else {
+            $error = "Contraseña incorrecta en registro_personas.";
+        }
+    } else {
+        // Si no encuentra en registro_personas, buscar en empleados
+        $stmt = $mysqli->prepare("SELECT id_Empleado, contrasena, roles_id_Rol, nombre FROM empleados WHERE email = ?");
+        $stmt->bind_param("s", $email);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        if ($result->num_rows == 1) {
+            $row = $result->fetch_assoc();
+            // Comparar contraseñas en texto plano (sin hash)
+            if ($password == $row['contrasena']) {
+                // Credenciales válidas
+                $_SESSION['loggedin'] = true;
+                $_SESSION['user_id'] = $row['id_Empleado'];
+                $_SESSION['role'] = $row['roles_id_Rol'];
+                $_SESSION['user_name'] = $row['nombre']; // Guardamos el nombre de usuario
+
+                if ($row['roles_id_Rol'] == 1) {
+                    header("Location: administracion.php");
+                    exit; // Detener ejecución tras redirigir
+                } else {
+                    $error = "Rol no válido en empleados.";
+                }
+            } else {
+                $error = "Contraseña incorrecta en empleados.";
+            }
+        } else {
+            $error = "Email no encontrado.";
+        }
+    }
+    $stmt->close();
+    $mysqli->close();
 }
-
-// Obtener la información del usuario desde la sesión
-$user_name = $_SESSION['user_name'];
-$user_email = $_SESSION['user_email'];
 ?>
 
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bienvenido</title>
-    <link rel="stylesheet" href="styles.css"> <!-- Incluye el nuevo CSS -->
-</head>
-<body class="session">
-    <div class="container session">
-        <header class="session">
-            <h1 class="session">Bienvenido, <?php echo htmlspecialchars($user_name); ?>!</h1>
-            <p class="session">Correo: <?php echo htmlspecialchars($user_email); ?></p>
-        </header>
-
-        <div class="message session">
-            <p class="session">Inicio de sesión exitosa. Serás redirigido a la página Galería...</p>
-            <p class="session">Redirigiendo en <span id="countdown" class="session">3</span> segundos...</p>
-        </div>
-    </div>
-
-    <script>
-        // Función para el contador
-        let countdown = 5; // Usamos 5 segundos como el tiempo de redirección
-        const countdownElement = document.getElementById('countdown');
-
-        const interval = setInterval(() => {
-            countdown--;
-            countdownElement.textContent = countdown;
-
-            if (countdown === 0) {
-                clearInterval(interval);
-                window.location.href = 'galeria.php'; // Redirigir al usuario
-            }
-        }, 1000);
-    </script>
-</body>
-</html>

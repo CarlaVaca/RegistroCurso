@@ -23,9 +23,9 @@
       <div class="logo">Desarrollo de aplicaciones web</div>
       <ul class="nav-links">
         <li><a href="index.html">Inicio</a></li>
-        <li><a href="galeria.php">Galería</a></li>
         <li><a href="login.php">Login</a></li>
         <li><a href="registro.php">Registro</a></li>
+        <li><a href="nosotros.php">Tutores</a></li>
       </ul>
     </nav>
   </header>
@@ -64,22 +64,25 @@
   <script>
     // Carrusel automático con transiciones fluidas
     $(document).ready(function () {
-      let currentIndex = 0;
-      const images = $('.carousel img');
-      const imageCount = images.length;
+  let currentIndex = 0;
+  const images = $('.carousel img');
+  const imageCount = images.length;
 
-      images.hide();
-      images.eq(currentIndex).show();
+  // Asegurarse de que solo la primera imagen se vea al cargar la página
+  images.eq(currentIndex).show();
 
-      function showNextImage() {
-        images.eq(currentIndex).fadeOut(500, function () {
-          currentIndex = (currentIndex + 1) % imageCount;
-          images.eq(currentIndex).fadeIn(500);
-        });
-      }
-
-      setInterval(showNextImage, 3000);
+  function showNextImage() {
+    images.eq(currentIndex).fadeOut(500, function () {
+      currentIndex = (currentIndex + 1) % imageCount; // Siguiente imagen
+      images.eq(currentIndex).fadeIn(500); // Mostrar la siguiente imagen
     });
+  }
+
+  // Iniciar el carrusel con un intervalo de 3 segundos
+  setInterval(showNextImage, 3000);
+});
+
   </script>
 </body>
 </html>
+

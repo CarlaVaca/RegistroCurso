@@ -1,0 +1,129 @@
+/* Estilo para el contenedor del formulario y mensajes */
+.container {
+    width: 70%;
+    margin: 30px auto;
+}
+
+form {
+    background-color: #fff;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+}
+
+h2 {
+    font-size: 1.5em;
+    color: #333;
+}
+
+/* Form group y botones */
+.form-group {
+    margin-bottom: 15px;
+}
+
+input, textarea {
+    width: 100%;
+    padding: 10px;
+    font-size: 1em;
+    border-radius: 4px;
+    border: 1px solid #ddd;
+}
+
+textarea {
+    resize: vertical;
+}
+
+.btn {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.btn:hover {
+    background-color: #45a049;
+}
+
+/* Tabla de cursos */
+.courses-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.courses-table th, .courses-table td {
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: left;
+}
+
+.courses-table th {
+    background-color: #f4f4f9;
+}
+
+.courses-table a {
+    color: #e74c3c;
+    text-decoration: none;
+}
+
+.courses-table a:hover {
+    text-decoration: underline;
+}
+
+/* Estilo para mensajes de éxito y error */
+.success-message {
+    background-color: #d4edda;
+    color: #155724;
+    padding: 10px;
+    border-radius: 4px;
+    margin-bottom: 20px;
+}
+
+.error-message {
+    background-color: #f8d7da;
+    color: #721c24;
+    padding: 10px;
+    border-radius: 4px;
+    margin-bottom: 20px;
+}
+/* Estilos del menú de navegación */
+header {
+  background-color: #333;
+  color: white;
+  padding: 10px 0;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 20px;
+}
+
+.navbar .logo {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.nav-links {
+  list-style: none;
+  display: flex;
+}
+
+.nav-links li {
+  margin: 0 15px;
+}
+
+.nav-links a {
+  color: white;
+  text-decoration: none;
+  font-size: 18px;
+}
+
+.nav-links a:hover {
+  color: #ff9800;
+}
